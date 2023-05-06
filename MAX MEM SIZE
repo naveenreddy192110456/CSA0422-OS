@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_MEM_SIZE 1000
+
+struct process {
+    int pid;
+    int size;
+    int allocated;
+};
+
+void best_fit(struct process *processes, int num_processes, int *memory_blocks, int num_blocks) {
+    int i, j, best_index;
+    for (i = 0; i < num_processes; i++) {
+        best_index = -1;
+        for (j = 0; j < num_blocks; j++) {
+            if (memory_blocks[j] >= processes[i].size && processes[i].allocated == 0) {
+                if (best_index == -1 || memory_blocks[j] < memory_blocks[best_index]) {
+                    best_index = j;
+                }
+            }
+        }
+        if (best_index != -1) {
+            processes[i].allocated = 1;
+            memory_blocks[best_index] -= processes[i].size;
+            printf("Process %d allocated to block %d\n", processes[i].pid, best_index);
+        } else {
+            printf("Process %d cannot be allocated\n", processes[i].pid);
+        }
+    }
+}
+
+int main() {
+    int num_processes, num_blocks, i;
+    struct process *processes;
+    int *memory_blocks;
+
+    printf("Enter the number of processes: ");
+    scanf("%d", &num_processes);
+    }
+
+    best_fit(processes, num_processes, memory_blocks, num_blocks);
+
+    free(processes);
+    free(memory_blocks);
+    return 0;
+}
